@@ -22,9 +22,10 @@ export class GameGateway {
   }
 
   @SubscribeMessage('startGame')
-  handleStartGame(client, data: { operationType: OperationType, count?: number }) {
+  handleStartGame(client: Socket, data: { operationType: OperationType; count?: number }) {
     const count = data.count ?? 10;
     const exercises = this.gameService.generateGame(data.operationType, count);
+    console.log(`Game started for ${client.id} with ${count} exercises`);
     client.emit('gameStarted', { exercises });
   }
 

@@ -60,11 +60,6 @@ export class GameService {
         product = Math.floor(Math.random() * 9) + 1;
         remainder = Math.floor(Math.random() * (num2 - 1)) + 1;
         num1 = num2 * product + remainder;
-
-        // num2 = Math.floor(Math.random() * 10) + 1;
-        // product = Math.floor(Math.random() * 10) + 1;
-        // remainder = Math.floor(Math.random() * num2);
-        // num1 = num2 * product + remainder;
         return {
           operation: OperationType.DIVISION,
           num1,
@@ -72,7 +67,6 @@ export class GameService {
           result: product,
           remainder
         };
-
       default:
         throw new Error("Unknown operation type");
     }

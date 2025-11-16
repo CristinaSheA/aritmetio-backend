@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { GameModule } from './game/game.module';
+import { StatsModule } from './stats/stats.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -18,7 +19,8 @@ import { GameModule } from './game/game.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),UserModule,
-    GameModule
+    GameModule,
+    StatsModule
   ],
   controllers: [AppController],
   providers: [AppService],
