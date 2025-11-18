@@ -12,22 +12,29 @@ export class StatsService {
     private readonly operationRepository: Repository<Operation>,
   ) {}
 
-  public getGlobalPrecision(userId: string): number {
-   return 0;
+  public async getGlobalPrecision(userId: string): Promise<number> {
+    const operations = await this.operationRepository.find({ where: { userId } });
+    if (operations.length === 0) return 0;
+    const correct = operations.filter(op => op.isCorrect).length;
+    return (correct / operations.length) * 100;
   }
-  public getWeeklyPrecision(userId: string): number {
-    return 0;
+
+  public async getWeeklyPrecision(userId: string): Promise<number> {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const operations = await this.operationRepository.find({ where: { userId } });
+    const weekly = operations.filter(op => op.createdAt >= oneWeekAgo);
+    if (weekly.length === 0) return 0;
+    const correct = weekly.filter(op => op.isCorrect).length;
+    return (correct / weekly.length) * 100 - await this.getGlobalPrecision(userId);
   }
-  public getAverageTimePerOperation(userId: string): number {
-    return 0;
-  }
+
   public async getTotalOperations(userId: string): Promise<number> {
-    const allOperations = this.operationRepository.find();
-    const userOperations = (await allOperations).filter(op => op.userId === userId);
-    if (userOperations.length === 0) return 0
-    console.log(userOperations);
+    const operations = await this.operationRepository.find({ where: { userId } });
+    if (operations.length === 0) return 0
+    console.log(operations);
     
-    return userOperations.length;
+    return operations.length;
   }
   public async getWeeklyOperations(userId: string): Promise<number> {
     const allOperations = this.operationRepository.find();
@@ -38,9 +45,6 @@ export class StatsService {
       return op.createdAt >= oneWeekAgo;
     });
     return currentWeekOperations.length;
-  }
-  public getMaximumPunctuation(userId: string): number {
-    return 0;
   }
 
   public createOperation(createOperationDto: CreateOperationDto): Promise<Operation> {

@@ -8,4 +8,7 @@ export class Operation {
   userId: string;
   @Column({ type: 'timestamp' })
   createdAt: Date; 
+
+  @Column({ type: 'boolean', default: false })
+  isCorrect: boolean;
 }

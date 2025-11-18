@@ -1,7 +1,9 @@
-import { IsDate, IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsDate, IsString, IsUUID } from "class-validator";
 
 
 export class CreateOperationDto {
   @IsUUID()
   userId: string;
+  @IsBoolean()
+  isCorrect: boolean;
 }

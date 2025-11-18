@@ -6,14 +6,7 @@ import { CreateOperationDto } from './dto/create-operation.dto';
 export class StatsController {
   constructor(private readonly statsService: StatsService) {}
 
-  @Get('total-operations/:userId')
-  getTotalOperations(@Param('userId') userId: string) {
-    return this.statsService.getTotalOperations(userId);
-  }
-  @Get('weekly-operations/:userId')
-  getWeeklyOperations(@Param('userId') userId: string) {
-    return this.statsService.getWeeklyOperations(userId);
-  }
+
   @Get('global-precision/:userId')
   getGlobalPrecision(@Param('userId') userId: string) {
     return this.statsService.getGlobalPrecision(userId);
@@ -22,14 +15,15 @@ export class StatsController {
   getWeeklyPrecision(@Param('userId') userId: string) {
     return this.statsService.getWeeklyPrecision(userId);
   }
-  @Get('average-time/:userId')
-  getAverageTimePerOperation(@Param('userId') userId: string) {
-    return this.statsService.getAverageTimePerOperation(userId);
+  @Get('total-operations/:userId')
+  getTotalOperations(@Param('userId') userId: string) {
+    return this.statsService.getTotalOperations(userId);
   }
-  @Get('maximum-punctuation/:userId')
-  maximumPunctuation(@Param('userId') userId: string) {
-    return this.statsService.getMaximumPunctuation(userId);
+  @Get('weekly-operations/:userId')
+  getWeeklyOperations(@Param('userId') userId: string) {
+    return this.statsService.getWeeklyOperations(userId);
   }
+
 
   @Post()
   create(@Body() createOperationDto: CreateOperationDto) {
