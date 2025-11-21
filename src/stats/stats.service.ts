@@ -29,12 +29,12 @@ export class StatsService {
     return (correct / weekly.length) * 100 - await this.getGlobalPrecision(userId);
   }
 
-  public async getTotalOperations(userId: string): Promise<number> {
+  public async getTotalOperations(userId: string): Promise<Operation[]> {
     const operations = await this.operationRepository.find({ where: { userId } });
-    if (operations.length === 0) return 0
+    if (operations.length === 0) return []
     console.log(operations);
     
-    return operations.length;
+    return operations;
   }
   public async getWeeklyOperations(userId: string): Promise<number> {
     const allOperations = this.operationRepository.find();

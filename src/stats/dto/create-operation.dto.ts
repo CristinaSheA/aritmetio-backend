@@ -6,4 +6,6 @@ export class CreateOperationDto {
   userId: string;
   @IsBoolean()
   isCorrect: boolean;
+  @IsString()
+  operationType: string;
 }
