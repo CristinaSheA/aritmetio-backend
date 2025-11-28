@@ -19,15 +19,46 @@ export class StatsService {
     return (correct / operations.length) * 100;
   }
 
+  // public async getWeeklyPrecision(userId: string): Promise<number> {
+  //   const oneWeekAgo = new Date();
+  //   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  //   const operations = await this.operationRepository.find({ where: { userId } });
+  //   const weekly = operations.filter(op => op.createdAt >= oneWeekAgo);
+  //   if (weekly.length === 0) return 0;
+  //   const correct = weekly.filter(op => op.isCorrect).length;
+  //   return (correct / weekly.length) * 100 - await this.getGlobalPrecision(userId);
+  // }
+
   public async getWeeklyPrecision(userId: string): Promise<number> {
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    const operations = await this.operationRepository.find({ where: { userId } });
-    const weekly = operations.filter(op => op.createdAt >= oneWeekAgo);
-    if (weekly.length === 0) return 0;
-    const correct = weekly.filter(op => op.isCorrect).length;
-    return (correct / weekly.length) * 100 - await this.getGlobalPrecision(userId);
+      const now = new Date();
+
+      const oneWeekAgo = new Date(now);
+      oneWeekAgo.setDate(now.getDate() - 7);
+
+      const twoWeeksAgo = new Date(now);
+      twoWeeksAgo.setDate(now.getDate() - 14);
+
+      const operations = await this.operationRepository.find({ where: { userId } });
+
+      // Semana actual
+      const currentWeekOps = operations.filter(op => op.createdAt >= oneWeekAgo);
+      const currentWeekCorrect = currentWeekOps.filter(op => op.isCorrect).length;
+      const currentPrecision = currentWeekOps.length
+        ? (currentWeekCorrect / currentWeekOps.length) * 100
+        : 0;
+
+      // Semana anterior
+      const lastWeekOps = operations.filter(op => 
+        op.createdAt >= twoWeeksAgo && op.createdAt < oneWeekAgo
+      );
+      const lastWeekCorrect = lastWeekOps.filter(op => op.isCorrect).length;
+      const lastWeekPrecision = lastWeekOps.length
+        ? (lastWeekCorrect / lastWeekOps.length) * 100
+        : 0;
+
+      return currentPrecision - lastWeekPrecision;
   }
+
 
   public async getTotalOperations(userId: string): Promise<Operation[]> {
     const operations = await this.operationRepository.find({ where: { userId } });
